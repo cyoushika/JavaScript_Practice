@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>What To Buy</title>
+</head>
+<body>
+  <h1>What to buy?</h1>
+  <p title="a gentle reminder"> Don't forget to buy this stuff.</p>
+  <ul id="purchases">
+    <li>A tin of beans</li>
+    <li class="sale">Cheese</li>
+    <li class="sale important">Milk</li>
+  </ul>
+  <p>This is a test</p>
+  <script>
+    //alert(typeof document.getElementById("perchases"));
+    // var item = document.getElementsByClassName("sale");
+    // alert(item.length)
+    // for(var i=0;i<item.length;i++){
+    //   alert(item[i]);
+    // }
+    // var paras = document.getElementsByTagName("p");
+    // for(var i=0;i<paras.length;i++){
+    //   if(paras[i].getAttribute("title")!=null){
+    //     alert(paras[i].getAttribute("title"));
+    //   }
+    // }
+    // var shopping = document.getElementById("purchases");
+    // alert(shopping.getAttribute("title"));
+    // shopping.setAttribute("title","a list of goods");
+    // alert(shopping.getAttribute("title"));
+    var paras = document.getElementsByTagName("p");
+    for(var i=0;i<paras.length;i++){
+      var titletext = paras[i].getAttribute("title");
+      if(titletext){
+        paras[i].setAttribute("title","brand new title text");
+        alert(paras[i].getAttribute("title"));
+      }
+    }
+  </script>
+</body>
+</html>
