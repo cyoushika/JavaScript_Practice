@@ -3,22 +3,27 @@
 <head>
   <meta charset="utf-8"/>
   <title>图片集合</title>
+  <link rel="stylesheet" href="styles/layout.css" media="screen" />
 </head>
 <body>
   <h1> 图片缩略 </h1>
   <ul>
     <li>
-      <a href="image/1.jpg" title="Presentation"> Presentation </a>
+      <a href="images/1.jpg" title="Presentation" onclick="showPic(this);return false;"> Presentation </a>
     </li>
     <li>
-      <a href="image/13.jpg" title="Dinner"> Dinner </a>
+      <a href="images/13.jpg" title="Dinner" onclick="showPic(this);return false;"> Dinner </a>
     </li>
     <li>
-      <a href="image/3.jpg" title="Humberger">Humberger</a>
+      <a href="images/3.jpg" title="Humberger" onclick="showPic(this);return false;">Humberger</a>
     </li>
     <li>
-      <a href="image/4.jpg" title="Dessert">Dessert</a>
+      <a href="images/4.jpg" title="Dessert" onclick="showPic(this);return false;">Dessert</a>
     </li>
   </ul>
+  <p id="description">Choose an image.</p>
+  <img id="placeholder" src="images/placeholder.jpg" alt="my image gallery"/>
+  <script type="text/javascript" src="scripts/showPic.js">
+  </script>
 </body>
 </html>
