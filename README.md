@@ -1,4 +1,4 @@
-#JavaScript_Practice
+# JavaScript_Practice
 只为学习JavaScript知识和练习编程（参考书：《JavaScript DOM编程艺术》（第二版）
 
 ## Charpter 3:
