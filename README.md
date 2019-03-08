@@ -24,6 +24,41 @@
     * 向后兼容：有时版本更替，或者用户的设置，会导致JavaScript无法使用。为了避免这种情况，最好的办法就是在使用js命令之前，确认一下能不能使用。在函数里加入一句if语句，比如"如果不能使用getElementById的话，就return false",写成代码就是if(!document.getElementById) return false; 这样做可以保证javascript不能正常运行的时候出现的问题
 
     * 性能考虑：js文件应该尽可能合并成一个，减少加载数量。代码应该尽可能压缩。下面是推荐的代码压缩工具:
-        - Douglas Crockford: http://www.crockford.com/javascript/jsmin.html
-        - Yahoo YUI Compressor: http://www.developer.yahoo.com/yui/compressor
-        - Google Closure Compiler: http://closure-compiler.appspot.com/home
+        - Douglas Crockford: <http://www.crockford.com/javascript/jsmin.html>
+        - Yahoo YUI Compressor: <http://www.developer.yahoo.com/yui/compressor>
+        - Google Closure Compiler: <http://closure-compiler.appspot.com/home>
+
+## Charpter 6:
+知识盘点：本章节主要是为了完善第四章中制作的图片库网站。
+1. 是否实现了平稳退化：因为我们保留了每个<a>里面href的原始链接，没有使用伪协议，所以即使用户禁用了JS功能，他们依然可以正常访问我们的网站，只不过每次打开图片后想返回就得点返回键了。
+2. js和html文件是否是分离的：第四章的时候还没有，因为我们吧onclick的事件处理函数放在了html文件的每个<a>节点里。为了分离js和html，我们对此进行了优化：
+    * 为ul节点设置一个独一无二的id，名为“imagegallery”，为js文件提供“挂钩”
+    * 为了保证兼容性，我们需要检查当前浏览器是否支持DOM Core命令。即getElementById和getElementsByTagName。同时，我们需要检查当前网站是否有一个元素的id为“imagegallery"。之后，我们遍历imagegallery元素里的所有链接，为每个链接的onclick事件提供一个匿名function（即不命名的函数，只有function（））来实现功能（传递这个链接当做参数给showPic函数，取消链接被点击时的默认行为，不让浏览器打开这个链接）
+    * 使用window.onload=（函数）可以让我们实现网页加载完毕以后再执行js脚本的功能，但这样的做法不支持多个函数加载的情况。如果直接写
+    'window.onload=函数1;
+     window.onload=函数2;'
+    的话，函数2会把函数1顶掉。而在需要绑定的函数不是很多的时候，我们可以用
+    'window.onload = function(){
+     firstFunction();
+     secondFunction();'
+    的方式来实现多个函数的绑定。但是，还有一种方法，那就是写一个函数，来弹性绑定各个函数，我们可以命名它为addLoadEvent。代码如下：
+'function addLoadEvent(func){
+var oldonload = window.onload;
+  if(typeof window.onload != \'fuction\')'{
+    window.onload=func;
+  }
+  else{
+	window.onload=function(){
+	oldonload();
+	func();
+    }
+  }
+}'
+
+    * 为了实现更好的兼容性，应该多去检查元素，并提供对策（增加了许多if判断）
+    * 在检查nodeName的时候，需要注意的是，尽管节点的名字可能是小写字母，但是这个属性返回的总是*大写字母*的值。
+    * 键盘访问：有一个事件处理函数叫onkeypress，这个可以实现”当用户按下键盘按钮的时候，。。。“的功能，听上去很好，但实际上不管用户按键盘上的什么按钮，都会触发这个事件，从而导致很多问题。而onclick虽然名字是click，但实际上用Tab键转移到相应链接然后按Enter键的动作，也可以算作是click，所以用onclick就可以处理我们的需求，完全不用onkeypress
+
+3. 结合JavaScript和CSS：我们在html里为js留下的挂钩，也同样可以在css里使用，我们可以单独为#imagegallery设置style。还可以为#imagegallery下的li，a，img单独设置style，十分的方便
+
+4. 关于DOM Core和HTML-DOM：getAttribute("href")，getElementsById，setAttribute等等都是DOM Core的组成部分，并不专属于JavaScript，支持DOM的任何一种语言都可以使用它们。它们不仅可以用于处理网页，还可以处理任何一种标记语言（比如XML）编写出来的文档。而使用JavaScript语言和DOM为HTML文件编写脚本的时候，有许多属性可供使用，比如onclick。这些属性属于HTML-DOM，可以大幅简化代码。比如document.getElementsByTagName("form")可以简化成document.forms。但是需要注意的是，HTML-DOM记号只能用于处理Web文档！
