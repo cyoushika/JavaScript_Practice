@@ -77,3 +77,7 @@ var oldonload = window.onload;
 4. 优化图片库：在之前，我们实现了HTML和JS代码的平稳退化，但依然留下了一段只为showPic脚本服务的代码，即placeholder。所以，我们可以把这部分代码利用动态创建的方式代替掉，实现更好的退化设计（参见function perparePlaceholder()). 我们固然可以使用appendChild的方法添加元素，但我们也有会遇到“想把元素插入到指定的位置，如XX之前，或XX之后”的诉求。这里可以使用insertBefore函数：parentElement.insertBefore(newElement,targetElement)。我们不需要知道targetElement的parentNode是什么，可以直接使用targetElement.parentNode来访问parent节点。但是很遗憾，DOM并没有提供insertAfter的方法，所以只能我们自己编写了
 
 5. Ajax: 异步加载页面技术，可以让用户更流畅地浏览页面，用刷新加载一小部分页面内容代替重新加载整个页面的方法提高用户体验。其中用到的核心对象就是XMLHttpRequest对象。我们可以通过var request = new XMLHttpRequest(); 的方式创建这个对象，并进行信息交互操作。其中常用的函数就是open，而open下又有GET，PUSH，SEND等多个参数命令。本代码由于是在Chrome上执行的，所以并没有达到书中的效果，因为Chrome禁止对本地文件的访问。但依然要说的是，Ajax可以带来许多好处，但Ajax可以实现的应用，也一定可以通过非Ajax技术来实现，很多站点使用AJax技术并明确要求必须启用JavaScript才能正常访问网站，教科书作者并不赞同这个观点。如果从一开始就以Ajax为起点，那么日后确实很难把Ajax从成品中剥离，在提供一个不适用Ajax的版本，但是如果一开始我们就是基于老式的页面刷新机制构建的，那么可以在既有的基础上，用Ajax拦住发送到服务器的请求，并把请求转交给XMLHttpRequest对象来处理，这样Ajax就可以扮演一个常规站点之上的层了。Ajax依赖的是服务器的处理，而非用户本地的处理，即使没有启用JavaScript，用户的体验也只是”更慢“而已，对服务的内容本身没有影响
+
+## Chapter8
+知识盘点：本章主要讲了几个常用的脚本：缩略词列表，快捷键列表，添加文献链接
+- 利用DOM自带的检索函数来搜集每个页面的目标元素，然后利用动态添加的方法，将这些信息可视化
