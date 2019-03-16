@@ -59,7 +59,7 @@ function insertAfter(newElement, targetElement){
 }
 
 function addLoadEvent(func){
-  alert("yes");
+  //alert("yes");
   var oldonload = window.onload;
   if(typeof window.onload !='function'){
     window.onload = func;
