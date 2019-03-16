@@ -62,3 +62,18 @@ var oldonload = window.onload;
 3. 结合JavaScript和CSS：我们在html里为js留下的挂钩，也同样可以在css里使用，我们可以单独为#imagegallery设置style。还可以为#imagegallery下的li，a，img单独设置style，十分的方便
 
 4. 关于DOM Core和HTML-DOM：getAttribute("href")，getElementsById，setAttribute等等都是DOM Core的组成部分，并不专属于JavaScript，支持DOM的任何一种语言都可以使用它们。它们不仅可以用于处理网页，还可以处理任何一种标记语言（比如XML）编写出来的文档。而使用JavaScript语言和DOM为HTML文件编写脚本的时候，有许多属性可供使用，比如onclick。这些属性属于HTML-DOM，可以大幅简化代码。比如document.getElementsByTagName("form")可以简化成document.forms。但是需要注意的是，HTML-DOM记号只能用于处理Web文档！
+
+## Charpter7:
+知识盘点：本章主要介绍了如何动态添加元素节点以及Ajax
+1. 传统的方法：document.write()函数，这个函数需要在<script>节点里执行。但是这违反了“行为应该与表现分离”的原则，即使把这句命令转移到js文件中，依然要面对"需要把想插入的语句放入script节点中才能执行"的问题。例如，当我们想实现插入<p>This text is inserted</p>的时候，编写了一个函数InsertText（text）的情况下，依然需要在script里执行例如InsertText("This text is inserted")。。另外，插入文本<p>很可能会被误认为是<p>标签，这是不被script允许的。
+
+2. innerHTML:几乎所有浏览器都支持这个属性（通过<div></div>标签来使用）。以<div id="testdiv"><p>This is <em>my</em> content</p></div>来举例，id为"testdiv"的div标记下有一个p标记，而p标记下又有2个文本节点和1个em标记，em标记下又有1个文本节点的结构。而从innerHTML属性的角度来看，testdiv.innerHTML只有一个值为“<p>This is <em>my</em> content</p>”的字符串。想要访问其中具体的节点，就需要使用DOM提供的标准函数（getElementById等等），而innerHTML则更像是一个大锤子，涵盖一切。我们可以对innerHTML进行直接赋值，这种情况下，不论innerHTML之前又什么样的内容，他都会被覆盖掉。需要注意的是，innerHTML属性也是HTML的专有属性，不能用于任何其他标记语言文档。
+
+3. DOM方法：使用getElementById和getElementsByTagName等方法把关于文档结构和内容的信息检索出来后再进行修改的话，可以做到更加细腻的调整。
+- DOM提供了创建新元素的命令：document.createElement(nodeName)。
+- 在创建新的元素以后，我们需要把它插入到HTML文档中，这时候就需要另一个函数：parentNode.appendChild(child)。这个函数可以将新创建的元素添加到parent节点里。例如：document.getElementById("testId").appendChild(child)。
+- 在我们创建了p节点以后，需要向里面添加内容，DOM提供了创建文本节点的函数：document.createTextNode(text)。例如：document.createTextNode("HelloWorld")，创建完成以后，我们用appendChild函数将文本节点插入到p节点下面
+
+4. 优化图片库：在之前，我们实现了HTML和JS代码的平稳退化，但依然留下了一段只为showPic脚本服务的代码，即placeholder。所以，我们可以把这部分代码利用动态创建的方式代替掉，实现更好的退化设计（参见function perparePlaceholder()). 我们固然可以使用appendChild的方法添加元素，但我们也有会遇到“想把元素插入到指定的位置，如XX之前，或XX之后”的诉求。这里可以使用insertBefore函数：parentElement.insertBefore(newElement,targetElement)。我们不需要知道targetElement的parentNode是什么，可以直接使用targetElement.parentNode来访问parent节点。但是很遗憾，DOM并没有提供insertAfter的方法，所以只能我们自己编写了
+
+5. Ajax: 异步加载页面技术，可以让用户更流畅地浏览页面，用刷新加载一小部分页面内容代替重新加载整个页面的方法提高用户体验。其中用到的核心对象就是XMLHttpRequest对象。我们可以通过var request = new XMLHttpRequest(); 的方式创建这个对象，并进行信息交互操作。其中常用的函数就是open，而open下又有GET，PUSH，SEND等多个参数命令。本代码由于是在Chrome上执行的，所以并没有达到书中的效果，因为Chrome禁止对本地文件的访问。但依然要说的是，Ajax可以带来许多好处，但Ajax可以实现的应用，也一定可以通过非Ajax技术来实现，很多站点使用AJax技术并明确要求必须启用JavaScript才能正常访问网站，教科书作者并不赞同这个观点。如果从一开始就以Ajax为起点，那么日后确实很难把Ajax从成品中剥离，在提供一个不适用Ajax的版本，但是如果一开始我们就是基于老式的页面刷新机制构建的，那么可以在既有的基础上，用Ajax拦住发送到服务器的请求，并把请求转交给XMLHttpRequest对象来处理，这样Ajax就可以扮演一个常规站点之上的层了。Ajax依赖的是服务器的处理，而非用户本地的处理，即使没有启用JavaScript，用户的体验也只是”更慢“而已，对服务的内容本身没有影响
