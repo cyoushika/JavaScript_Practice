@@ -67,7 +67,7 @@ var oldonload = window.onload;
 知识盘点：本章主要介绍了如何动态添加元素节点以及Ajax
 1. 传统的方法：document.write()函数，这个函数需要在<script>节点里执行。但是这违反了“行为应该与表现分离”的原则，即使把这句命令转移到js文件中，依然要面对"需要把想插入的语句放入script节点中才能执行"的问题。例如，当我们想实现插入<p>This text is inserted</p>的时候，编写了一个函数InsertText（text）的情况下，依然需要在script里执行例如InsertText("This text is inserted")。。另外，插入文本<p>很可能会被误认为是<p>标签，这是不被script允许的。
 
-2. innerHTML:几乎所有浏览器都支持这个属性（通过<div></div>标签来使用）。以<div id="testdiv"><p>This is <em>my</em> content</p></div>来举例，id为"testdiv"的div标记下有一个p标记，而p标记下又有2个文本节点和1个em标记，em标记下又有1个文本节点的结构。而从innerHTML属性的角度来看，testdiv.innerHTML只有一个值为“<p>This is <em>my</em> content</p>”的字符串。想要访问其中具体的节点，就需要使用DOM提供的标准函数（getElementById等等），而innerHTML则更像是一个大锤子，涵盖一切。我们可以对innerHTML进行直接赋值，这种情况下，不论innerHTML之前又什么样的内容，他都会被覆盖掉。需要注意的是，innerHTML属性也是HTML的专有属性，不能用于任何其他标记语言文档。
+2. innerHTML:几乎所有浏览器都支持这个属性（通过<div></div>标签来使用）。以<div id="testdiv"><p>This is <em>my</em> content</p></div>来举例，id为"testdiv"的div标记下有一个p标记，而p标记下又有2个文本节点和1个em标记，em标记下又有1个文本节点的结构。而从innerHTML属性的角度来看，testdiv.innerHTML只有一个值为\“<p>This is <em>my</em> content</p>\”的字符串。想要访问其中具体的节点，就需要使用DOM提供的标准函数（getElementById等等），而innerHTML则更像是一个大锤子，涵盖一切。我们可以对innerHTML进行直接赋值，这种情况下，不论innerHTML之前又什么样的内容，他都会被覆盖掉。需要注意的是，innerHTML属性也是HTML的专有属性，不能用于任何其他标记语言文档。
 
 3. DOM方法：使用getElementById和getElementsByTagName等方法把关于文档结构和内容的信息检索出来后再进行修改的话，可以做到更加细腻的调整。
 - DOM提供了创建新元素的命令：document.createElement(nodeName)。
