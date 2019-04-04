@@ -1,0 +1,16 @@
+p#example{
+  color: grey;
+  font-family: 12px "Arial",sans-serif;
+}
+
+p{
+  font-size: 1em;
+}
+
+.fineprint{
+  font-size:.8em;
+}
+
+#intro{
+  font-size:1.2em;
+}
