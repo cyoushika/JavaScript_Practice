@@ -78,6 +78,33 @@ var oldonload = window.onload;
 
 5. Ajax: 异步加载页面技术，可以让用户更流畅地浏览页面，用刷新加载一小部分页面内容代替重新加载整个页面的方法提高用户体验。其中用到的核心对象就是XMLHttpRequest对象。我们可以通过var request = new XMLHttpRequest(); 的方式创建这个对象，并进行信息交互操作。其中常用的函数就是open，而open下又有GET，PUSH，SEND等多个参数命令。本代码由于是在Chrome上执行的，所以并没有达到书中的效果，因为Chrome禁止对本地文件的访问。但依然要说的是，Ajax可以带来许多好处，但Ajax可以实现的应用，也一定可以通过非Ajax技术来实现，很多站点使用AJax技术并明确要求必须启用JavaScript才能正常访问网站，教科书作者并不赞同这个观点。如果从一开始就以Ajax为起点，那么日后确实很难把Ajax从成品中剥离，在提供一个不适用Ajax的版本，但是如果一开始我们就是基于老式的页面刷新机制构建的，那么可以在既有的基础上，用Ajax拦住发送到服务器的请求，并把请求转交给XMLHttpRequest对象来处理，这样Ajax就可以扮演一个常规站点之上的层了。Ajax依赖的是服务器的处理，而非用户本地的处理，即使没有启用JavaScript，用户的体验也只是”更慢“而已，对服务的内容本身没有影响
 
-## Chapter8
+## Chapter 8:
 知识盘点：本章主要讲了几个常用的脚本：缩略词列表，快捷键列表，添加文献链接
 - 利用DOM自带的检索函数来搜集每个页面的目标元素，然后利用动态添加的方法，将这些信息可视化
+
+## Chapter 9:
+知识盘点：本章主要讲了如何通过CSS和DOM的方式修改页面的Layout。
+1. 页面可以分为三层：结构层，表示层，行为层。虽然我们主张在设计的时候用HTML搭建结构，CSS设置呈现效果，DOM脚本实现文档行为，但这三个技术之间存在着一些潜在的重叠区域，比如createElement，appendChild。而CSS里也有:hover, :focu这样的伪类允许我们根据用户句法事件来改变元素的呈现效果：
+    - 结构层（Structural Layer）是由HTML或者XHTML之类的标记语言负责创建，标签（tag）则是对页面内容的语义含义进行描述，例如<p>标签表达了这样一种语义：“这是一个文本段”，但这些标签并不包含任何关于内容如何显示的信息
+    - 表示层（Presentation Layer）由CSS负责完成，CSS描述页面应该如何呈现
+    - 行为层（Behavior Layer）负责内容应该如何响应事件这个问题，主要由JavaScript和DOM负责，但我们主张平稳退化，分离页面和JS
+
+2. Style属性：文档中的每个元素都是一个对象，而每个对象又有各种各样的属性，一些属性可以告诉我们元素在节点树上的位置信息，比如parentNode，nextSibling，previousSibling，childNodes，firstChild，lastChild这些属性，就告诉了我们文档中各节点之间的关系信息。而其他一些属性（比如nodeType和nodeName属性）包含元素本身的信息，比如说对某个元素的nodeName属性进行的查询将返回一个诸如"p"之类的字符串。除此以外，文档的每个元素节点还都有一个属性：style。
+    - style属性包含着元素的样式，查询这个属性将返回一个对象而不是一个简单的字符串，样式都存放在这个style对象的属性里：element.style.property
+    - 通过element.style.color即可获得这个element的颜色，但是如果我们使用CSS来设置显示效果，就不能通过这个方法来获取该元素的信息。。
+    - 除了查询，我们还可以对style进行赋值，从而改变其内容（DOM）
+
+3. 使用CSS声明样式的具体做法：
+    - 标签元素(例如p)： p{font-size：1em;}
+    - 为特定class属性的所有元素统一声明：.fineprint{font-size:.8em;}
+    - 为独一无二的id属性的元素单独声明：#intro{font-size:1.2em;}
+    - 为有类似属性的过个元素声明：input[type*="text"]{font-size:1.2em};
+    - 在现代浏览器中，设置可以根据元素的位置声明样式：p:first-of-type{font-size:2em;}，CSS2，3里面提供了许多根据位置设定显示方式的方法，但并非每个浏览器都支持...在那之前，我们可以使用DOM的方法来解决这个问题
+
+4. 根据某一条件重复设置内容的做法：比起CSS，使用JavaScript来处理重复性任务要方便的多(参见stripeTables())
+
+5. 使用伪类来处理事件，比如a:hover{color：#c60}，即可在用户把鼠标悬停在a（超链接）上的时候，改变链接的颜色。但是由于不同浏览器对CSS伪类的支持很不完整，所以使用DOM来改变HTML元素的样式更符合实际（参见highlightRows())
+
+6. 那么什么时候该用CSS，什么时候用DOM呢？如果想改变某个元素的呈现效果，使用CSS。如果想改变某个元素的行为，使用DOM。如果你想根据某个元素的行为去改变它的呈现效果，那么请运用你的智慧，在这个问题上没有标准答案...
+
+7. className属性：与其使用DOM直接改变某个元素的样式，不如通过JS代码更新这个元素的class属性，然后再CSS里通过对class进行统一的设置。我们可以通过elem.setAttribute("class","intro")来改变元素的class属性，也可以使用element.className="..."的方式对class属性进行赋值。但是这个方法有个不足之处，那就是它不是追加，而是替换掉原来的class。为了不覆盖掉之前的class内容，我们可以用elem.className+="..."的方式进行追加。但是假如这个元素原本没有class呢？所以需要进行判定，如果class为null，则直接赋值，如果不为null，那就追加（参见addClass)
