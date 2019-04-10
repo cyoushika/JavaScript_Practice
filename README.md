@@ -122,7 +122,7 @@ var oldonload = window.onload;
     - 这个函数有两个参数，函数名"function"和间隔interval。其中间隔interval是以毫秒为单位的，所以“5秒以后执行a函数”应该是setTimeout(a,5000)
     - 通过把setTimeout赋值给一个变量，例如movement=setTimeout(a,5000);，让我们可以在这5秒的时间里随时使用clearTimeout(movement)来取消这个执行。注意，movement没有加var，因此它是个全局变量，在函数之外的地方，我们也依然可以通过movement来取消动作。
 
-3. 我们可以通过style.left和style.top来获取元素的位置，然而，这几个属性返回的不是数字，而是string字符串。因此我们需要使用praseInt函数。praseInt（string）可以提取string里面的数字，并返回一个整数。当我们需要返回一个浮点数的时候，我们可以使用praseFloat(string)。*需要注意的是，在我们计算完元素的位置并返还给left和top的时候，需要再把它们转换成string，并加上单位，例子中使用的是px*。通过计算和操作元素的位置，我们可以实现更加圆滑的动画，而非一瞬间跳过去。（参见moveMessage)
+3. 我们可以通过style.left和style.top来获取元素的位置，然而，这几个属性返回的不是数字，而是string字符串。因此我们需要使用praseInt函数。praseInt（string）可以提取string里面的数字，并返回一个整数。当我们需要返回一个浮点数的时候，我们可以使用praseFloat(string)。**需要注意的是，在我们计算完元素的位置并返还给left和top的时候，需要再把它们转换成string，并加上单位，例子中使用的是px**。通过计算和操作元素的位置，我们可以实现更加圆滑的动画，而非一瞬间跳过去。（参见moveMessage)
 
 4. 然而，moveMessage里面移动的元素，位置，间隔都是固定的，因此我们需要把它们抽象画，使我们随时可以改变任何元素到任意位置（参见moveElement)
 
