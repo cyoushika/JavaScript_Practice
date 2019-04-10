@@ -116,7 +116,7 @@ var oldonload = window.onload;
         - static是position属性的默认值，意思是有关元素将按照他们在标记里出现的先后顺序出现在浏览器窗口里
         - relative的含义与static相似，区别是position属性等于relative的元素还可以从文档的正常显示循序里脱离出来
         - 使用absolute可以让我们将这个元素摆放到容纳它的"容器"的任何位置，这个容器要么是文档本身，要么就是一个有着fixed或者absolute属性的父元素。这个元素在原始表及里出现的位置与他的显示位置五官，因为它的显示位置由top,left,right,和bottom等属性决定。我们可以使用像素或者百分比作为单位设置这些属性的值。
-        - left意味着“把这个元素放在距离文档左边界特定的距离的位置”，因此left和right可能会存在冲突，应该只使用其中的一个（要么规定左边，要么规定右边），而top和bottom也是如此
+    - left意味着“把这个元素放在距离文档左边界特定的距离的位置”，因此left和right可能会存在冲突，应该只使用其中的一个（要么规定左边，要么规定右边），而top和bottom也是如此
 
 2. 想要实现"一段时间以后再执行XXX函数"的时候，就需要使用setTimeout函数。
     - 这个函数有两个参数，函数名"function"和间隔interval。其中间隔interval是以毫秒为单位的，所以“5秒以后执行a函数”应该是setTimeout(a,5000)
