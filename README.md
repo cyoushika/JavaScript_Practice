@@ -108,3 +108,31 @@ var oldonload = window.onload;
 6. 那么什么时候该用CSS，什么时候用DOM呢？如果想改变某个元素的呈现效果，使用CSS。如果想改变某个元素的行为，使用DOM。如果你想根据某个元素的行为去改变它的呈现效果，那么请运用你的智慧，在这个问题上没有标准答案...
 
 7. className属性：与其使用DOM直接改变某个元素的样式，不如通过JS代码更新这个元素的class属性，然后再CSS里通过对class进行统一的设置。我们可以通过elem.setAttribute("class","intro")来改变元素的class属性，也可以使用element.className="..."的方式对class属性进行赋值。但是这个方法有个不足之处，那就是它不是追加，而是替换掉原来的class。为了不覆盖掉之前的class内容，我们可以用elem.className+="..."的方式进行追加。但是假如这个元素原本没有class呢？所以需要进行判定，如果class为null，则直接赋值，如果不为null，那就追加（参见addClass)
+
+##Charpter10
+知识盘点：本章主要讲的是如何通过setTimeout函数实现“动画”（即移动元素的位置）效果。
+1. 每一个元素都有自己的style属性，而style里又包含了position, left, right, top, bottom几个属性。
+    - position属性的合法值有四个，static,fixed,relative,和absolute。
+        - static是position属性的默认值，意思是有关元素将按照他们在标记里出现的先后顺序出现在浏览器窗口里
+        - relative的含义与static相似，区别是position属性等于relative的元素还可以从文档的正常显示循序里脱离出来
+        - 使用absolute可以让我们将这个元素摆放到容纳它的"容器"的任何位置，这个容器要么是文档本身，要么就是一个有着fixed或者absolute属性的父元素。这个元素在原始表及里出现的位置与他的显示位置五官，因为它的显示位置由top,left,right,和bottom等属性决定。我们可以使用像素或者百分比作为单位设置这些属性的值。
+        - left意味着“把这个元素放在距离文档左边界特定的距离的位置”，因此left和right可能会存在冲突，应该只使用其中的一个（要么规定左边，要么规定右边），而top和bottom也是如此
+
+2. 想要实现"一段时间以后再执行XXX函数"的时候，就需要使用setTimeout函数。
+    - 这个函数有两个参数，函数名"function"和间隔interval。其中间隔interval是以毫秒为单位的，所以“5秒以后执行a函数”应该是setTimeout(a,5000)
+    - 通过把setTimeout赋值给一个变量，例如movement=setTimeout(a,5000);，让我们可以在这5秒的时间里随时使用clearTimeout(movement)来取消这个执行。注意，movement没有加var，因此它是个全局变量，在函数之外的地方，我们也依然可以通过movement来取消动作。
+
+3. 我们可以通过style.left和style.top来获取元素的位置，然而，这几个属性返回的不是数字，而是string字符串。因此我们需要使用praseInt函数。praseInt（string）可以提取string里面的数字，并返回一个整数。当我们需要返回一个浮点数的时候，我们可以使用praseFloat(string)。*需要注意的是，在我们计算完元素的位置并返还给left和top的时候，需要再把它们转换成string，并加上单位，例子中使用的是px*。通过计算和操作元素的位置，我们可以实现更加圆滑的动画，而非一瞬间跳过去。（参见moveMessage)
+
+4. 然而，moveMessage里面移动的元素，位置，间隔都是固定的，因此我们需要把它们抽象画，使我们随时可以改变任何元素到任意位置（参见moveElement)
+
+5. 示例：根据用户鼠标悬停的位置，展示预览图（list.html和prepareSlideshow)。此处出现的问题是，因为我们使用的movement是全局变量，没有用clearTimeout对动作进行取消，所以在我们鼠标快速移动的时候，moveElement都会被执行，会出现同时向左和向右移动图片的"拔河"现象...
+    - 问题一：如果还没有设置movement变量之前就执行这句话，我们就会或多一个错误。
+    - 问题二：如果使用var movement，clearTimeout函数就无法正常工作，因为clearTimeout的上下文里不存在局部变量movement。
+    - 因此，我们既不能使用全局变量，也不能使用局部变量，而是需要一个介乎其中的东西，那就是“只属于这个元素的属性”。至今为止，我们都是使用DOM自己提供的属性，而DOM其实也提供了用户自定义属性的方法。只要我们使用elem.movement = setTimeout(a,5000).元素elem就会拥有一个全新的属性"movement"，且只与elem有关。而在我们进行坐标计算之前，先看看这个元素有没有movement，如果有，那就clearTimeout清理掉再执行下面的语句，如果没有，那就正常执行语句。这样就可以解决多次触发moveElement函数的冲突问题
+
+6. 虽然我们可以让元素一点点的移动，但是在实际环境下，这种操作很缓慢且不够"流畅"。所以，我们可以通过计算元素的现有位置与目标位置的距离，如果离得很远则快速移动。这里的例子使用的是,dist = (final_x - xpos)/10。也就是说，元素会想目的地移动十分之一的距离，如果相差500，那就移动50，如果相差100，那就移动10。但是问题是，如果距离小于10了，那dist就会变成0，元素会停滞不前。为了解决这个问题，我们可以使用Math里的几个函数。
+    - Math.ceil(number)会返回一个不小于number的最小整数（比如，number=10.1，则函数会返回11）
+    - Math.floor(number)会返回一个不大于number的最大整数 （比如，number=10.1，则函数会返回10）
+    - Math.round(number)会返回一个四舍五入的整数。
+    而在这里，我们需要使用的是ceil函数，这样在距离小于10的时候，它依然能保证元素以1px的速度向目标移动，直到距离为0
