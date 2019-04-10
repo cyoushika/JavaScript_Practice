@@ -109,7 +109,7 @@ var oldonload = window.onload;
 
 7. className属性：与其使用DOM直接改变某个元素的样式，不如通过JS代码更新这个元素的class属性，然后再CSS里通过对class进行统一的设置。我们可以通过elem.setAttribute("class","intro")来改变元素的class属性，也可以使用element.className="..."的方式对class属性进行赋值。但是这个方法有个不足之处，那就是它不是追加，而是替换掉原来的class。为了不覆盖掉之前的class内容，我们可以用elem.className+="..."的方式进行追加。但是假如这个元素原本没有class呢？所以需要进行判定，如果class为null，则直接赋值，如果不为null，那就追加（参见addClass)
 
-##Charpter10
+## Charpter10
 知识盘点：本章主要讲的是如何通过setTimeout函数实现“动画”（即移动元素的位置）效果。
 1. 每一个元素都有自己的style属性，而style里又包含了position, left, right, top, bottom几个属性。
     - position属性的合法值有四个，static,fixed,relative,和absolute。
@@ -135,4 +135,4 @@ var oldonload = window.onload;
     - Math.ceil(number)会返回一个不小于number的最小整数（比如，number=10.1，则函数会返回11）
     - Math.floor(number)会返回一个不大于number的最大整数 （比如，number=10.1，则函数会返回10）
     - Math.round(number)会返回一个四舍五入的整数。
-    而在这里，我们需要使用的是ceil函数，这样在距离小于10的时候，它依然能保证元素以1px的速度向目标移动，直到距离为0
+而在这里，我们需要使用的是ceil函数，这样在距离小于10的时候，它依然能保证元素以1px的速度向目标移动，直到距离为0
